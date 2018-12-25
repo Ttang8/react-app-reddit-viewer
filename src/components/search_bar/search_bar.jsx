@@ -7,18 +7,26 @@ class SearchBar extends Component {
     this.state = {
       subreddit: ""
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   update(field) {
     return event => this.setState({[field]: event.target.value});
   }
 
-  handleSubmit() {
-
+  handleSubmit(e) {
+    e.preventDefault();
+    const title = this.state.subreddit ? this.state.subreddit : 'all'
+    this.props.clearPosts();
+    this.props.updateIsLoaded();
+    this.props.requestPosts("",0,title)
+      .then(() => this.props.createArray())
+      .then(() => this.props.updateTitle(title))
+      .then(() => this.props.updateIsLoaded())
   }
 
   render() {
-    console.log(this.props);
     return(
       <div>
         <form onSubmit={this.handleSubmit}>

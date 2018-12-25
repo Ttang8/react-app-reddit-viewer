@@ -20,6 +20,9 @@ class PostIndex extends Component {
 
     this.handleClick = this.handleClick.bind(this);
     this.handleNSFW = this.handleNSFW.bind(this);
+    this.updateTitle = this.updateTitle.bind(this);
+    this.updateIsLoaded = this.updateIsLoaded.bind(this);
+    this.createArray = this.createArray.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +30,18 @@ class PostIndex extends Component {
       .then(() => this.createArray())
       .then(() => this.setState({isLoaded: true}))
       .then(() => this.handleAfter())
+  }
+
+  updateTitle(title) {
+    this.setState({ title: title});
+  }
+
+  updateIsLoaded() {
+    if(this.state.isLoaded) {
+      this.setState({ isLoaded: false });
+    } else {
+      this.setState({ isLoaded: true });
+    }
   }
 
   handleAfter () {
@@ -178,13 +193,14 @@ class PostIndex extends Component {
   }
 
   render() {
+    console.log(this.props);
     const {isLoaded} = this.state;
     if(!isLoaded) {
       return (<div>Loading...</div>)
     } else {
       return(
         <div>
-          <SearchBar props={this.props}/>
+          <SearchBar createArray={this.createArray} updateIsLoaded={this.updateIsLoaded} requestPosts={this.props.requestPosts} clearPosts={this.props.clearPosts} updateTitle={this.updateTitle}/>
           {`r/${this.state.title}`}
           <br/>
           <button onClick={this.handleNSFW} >{this.state.viewNsfw ? "nsfw on" : "nsfw off"}</button>
