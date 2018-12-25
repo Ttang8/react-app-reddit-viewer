@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 export const requestPosts = (afterString = "", postCount = "", subreddit = "all") => (
   $.ajax({
     method: 'GET',
