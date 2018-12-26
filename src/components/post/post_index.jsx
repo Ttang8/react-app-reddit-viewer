@@ -26,10 +26,34 @@ class PostIndex extends Component {
   }
 
   componentDidMount() {
-    this.props.requestPosts(this.state.afterString, this.props.posts.length, this.state.title)
+    if(localStorage.hasOwnProperty('array')) {
+      this.hydrateStateWithLocalStorage();
+    } else {
+      this.props.requestPosts(this.state.afterString, this.props.posts.length, this.state.title)
       .then(() => this.createArray())
       .then(() => this.setState({isLoaded: true}))
       .then(() => this.handleAfter())
+    }
+  }
+
+  componentWillUnmount() {
+    for(let key in this.state) {
+      localStorage.setItem(key, this.state[key]);
+    }
+  }
+
+  hydrateStateWithLocalStorage() {
+    for(let key in this.state) {
+      if (localStorage.hasOwnProperty(key)) {
+        let value = localStorage.getItem(key);
+        try {
+          value = JSON.parse(value);
+          this.setState({ [key]: value });
+        } catch (e) {
+          this.setState({ [key]: value });
+        }
+      }
+    }
   }
 
   updateTitle(title) {
