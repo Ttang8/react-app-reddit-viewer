@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  requestPosts: (afterString, postCount, subreddit) => dispatch(requestPosts(afterString, postCount, subreddit)),
+  requestPosts: (afterString, postCount, subreddit, limit) => dispatch(requestPosts(afterString, postCount, subreddit, limit)),
   clearPosts: () => dispatch(clearPosts()),
 });
 

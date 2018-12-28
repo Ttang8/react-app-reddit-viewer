@@ -28,17 +28,40 @@ class PostIndex extends Component {
   componentDidMount() {
     if(localStorage.hasOwnProperty('array')) {
       this.hydrateStateWithLocalStorage();
+      let afterString = JSON.parse(localStorage.getItem('afterString'));
+      let length = JSON.parse(localStorage.getItem('array')).length;
+      let title = JSON.parse(localStorage.getItem('title'));
+      this.props.requestPosts("", "", title, length)
+        .then(() => this.createArray())
+        .then(() => this.setState({isLoaded: true}))
+        .then(() => this.handleAfter())
     } else {
       this.props.requestPosts(this.state.afterString, this.props.posts.length, this.state.title)
       .then(() => this.createArray())
       .then(() => this.setState({isLoaded: true}))
       .then(() => this.handleAfter())
     }
+    window.addEventListener(
+      "beforeunload",
+      this.saveState.bind(this)
+    );
   }
 
   componentWillUnmount() {
+    window.removeEventListener(
+      "beforeunload",
+      this.saveState.bind(this)
+    );
+    this.saveState();
+  }
+
+  saveState() {
     for(let key in this.state) {
-      localStorage.setItem(key, this.state[key]);
+      if (key === 'isLoaded') {
+        localStorage.setItem(key, false)
+      } else {
+        localStorage.setItem(key, JSON.stringify(this.state[key]));
+      }
     }
   }
 
@@ -211,13 +234,13 @@ class PostIndex extends Component {
 
   handleClick (e) {
     e.preventDefault();
+    console.log(this.state.title);
     this.props.requestPosts(this.state.afterString, this.props.posts.length, this.state.title)
       .then(() => this.handleAfter())
       .then(() => this.createArray());
   }
 
   render() {
-    console.log(this.props);
     const {isLoaded} = this.state;
     if(!isLoaded) {
       return (<div>Loading...</div>)
