@@ -142,18 +142,13 @@ class PostIndex extends Component {
           </li>
         );
       } else if (post.includes('gfycat')) {
-        let a = this.props.posts[idx].data.media_embed.content;
-        console.log(a);
-        let start = a.indexOf('http')
-        let end = a.indexOf('schema=gfycat') + 13
-        console.log(a.slice(start, end));
         let index;
         if (post.includes('detail/')) {
           index = post.indexOf('detail/') + 7;
         } else {
           index = post.indexOf('.com/') + 5;
         }
-        let gfyurl = "https://giant.gfycat.com/" + post.slice(index) + ".mp4";
+        let gfyurl = "https://gfycat.com/ifr/" + post.slice(index);
           return(
             <li className="image deactive" key={idx}>
               <a href={this.props.posts[idx].data.url} target="_blank" rel="noopener noreferrer">
@@ -162,7 +157,7 @@ class PostIndex extends Component {
                     {postTitle}
                   </div>
                 </div>
-                <iframe className="embedly-embed" src={a.slice(start,end)} scrolling="no" frameBorder="0" width="600" height="338" allow="autoplay; fullscreen" allowFullScreen={true}></iframe>
+                <iframe className="gfycat" src={gfyurl} scrolling="no" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen={true}></iframe>
               </a>
             </li>
           );
@@ -198,7 +193,6 @@ class PostIndex extends Component {
         }
       } else if (post.includes('youtube')){
         let url = this.props.posts[idx].data.url.replace('watch?v=', 'embed/')
-        console.log(url);
         return(
           <li className="ytvideo" key={idx}>
             <a href={this.props.posts[idx].data.url} target="_blank" rel="noopener noreferrer">
@@ -256,14 +250,12 @@ class PostIndex extends Component {
 
   handleClick (e) {
     e.preventDefault();
-    console.log(this.state.title);
     this.props.requestPosts(this.state.afterString, this.props.posts.length, this.state.title)
       .then(() => this.handleAfter())
       .then(() => this.createArray());
   }
 
   render() {
-    console.log(this.props);
     const {isLoaded} = this.state;
     if(!isLoaded) {
       return (<div>Loading...</div>)
