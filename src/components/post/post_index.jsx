@@ -97,7 +97,7 @@ class PostIndex extends Component {
 
   createArray() {
     let array = this.props.posts.map((post) => {
-      if (post.data.url.includes('png') || post.data.url.includes('jpg') || post.data.url.includes('gif') || post.data.url.includes('gfycat')) {
+      if (post.data.url.includes('png') || post.data.url.includes('jpg') || post.data.url.includes('gif') || post.data.url.includes('gfycat') || post.data.url.includes('youtube')) {
         return post.data.url;
       } else {
         return post.data.thumbnail;
@@ -113,6 +113,10 @@ class PostIndex extends Component {
 
   renderPosts () {
     let posts = this.state.array.map((post,idx) => {
+      let postTitle = this.props.posts[idx].data.title;
+      if(postTitle.length > 50) {
+        postTitle = postTitle.slice(0, 50).concat('...')
+      }
       if (!this.state.viewNsfw) {
         if (this.props.posts[idx]) {
           if (this.props.posts[idx].data.parent_whitelist_status) {
@@ -130,7 +134,7 @@ class PostIndex extends Component {
             <a href={this.props.posts[idx].data.url} target="_blank" rel="noopener noreferrer">
               <div className="image_overlay">
                 <div className="title_hover" onClick={this.handleReddit.bind(this)} data-link={`https://reddit.com${this.props.posts[idx].data.permalink}`}>
-                  {this.props.posts[idx].data.title}
+                  {postTitle}
                 </div>
               </div>
               <img src={post} alt={post.title}></img>
@@ -138,6 +142,11 @@ class PostIndex extends Component {
           </li>
         );
       } else if (post.includes('gfycat')) {
+        let a = this.props.posts[idx].data.media_embed.content;
+        console.log(a);
+        let start = a.indexOf('http')
+        let end = a.indexOf('schema=gfycat') + 13
+        console.log(a.slice(start, end));
         let index;
         if (post.includes('detail/')) {
           index = post.indexOf('detail/') + 7;
@@ -150,13 +159,10 @@ class PostIndex extends Component {
               <a href={this.props.posts[idx].data.url} target="_blank" rel="noopener noreferrer">
                 <div className="image_overlay">
                   <div className="title_hover" onClick={this.handleReddit.bind(this)} data-link={`https://reddit.com${this.props.posts[idx].data.permalink}`}>
-                    {this.props.posts[idx].data.title}
+                    {postTitle}
                   </div>
                 </div>
-                <video autoPlay muted loop poster={this.props.posts[idx].data.thumbnail}>
-                  <source src={gfyurl} type="video/mp4"/>
-                  <img src={this.props.posts[idx].data.thumbnail} alt={post.title}></img>
-                </video>
+                <iframe className="embedly-embed" src={a.slice(start,end)} scrolling="no" frameBorder="0" width="600" height="338" allow="autoplay; fullscreen" allowFullScreen={true}></iframe>
               </a>
             </li>
           );
@@ -169,7 +175,7 @@ class PostIndex extends Component {
               <a href={this.props.posts[idx].data.url} target="_blank" rel="noopener noreferrer">
                 <div className="image_overlay">
                   <div className="title_hover" onClick={this.handleReddit.bind(this)} data-link={`https://reddit.com${this.props.posts[idx].data.permalink}`}>
-                    {this.props.posts[idx].data.title}
+                    {postTitle}
                   </div>
                 </div>
                 <video autoPlay muted loop src={videourl}></video>
@@ -182,7 +188,7 @@ class PostIndex extends Component {
               <a href={this.props.posts[idx].data.url} target="_blank" rel="noopener noreferrer">
                 <div className="image_overlay">
                   <div className="title_hover" onClick={this.handleReddit.bind(this)} data-link={`https://reddit.com${this.props.posts[idx].data.permalink}`}>
-                    {this.props.posts[idx].data.title}
+                    {postTitle}
                   </div>
                 </div>
                 <img src={post} alt={post.title}></img>
@@ -190,6 +196,22 @@ class PostIndex extends Component {
             </li>
           );
         }
+      } else if (post.includes('youtube')){
+        let url = this.props.posts[idx].data.url.replace('watch?v=', 'embed/')
+        console.log(url);
+        return(
+          <li className="ytvideo" key={idx}>
+            <a href={this.props.posts[idx].data.url} target="_blank" rel="noopener noreferrer">
+              <div className="image_overlay">
+                <div className="title_hover" onClick={this.handleReddit.bind(this)} data-link={`https://reddit.com${this.props.posts[idx].data.permalink}`}>
+                  {postTitle}
+                </div>
+              </div>
+              <iframe height="300" width="500px" src={url} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </a>
+          </li>
+        )
+
       } else if (post.includes('imgur')) {
         let imgrurl = post;
         this.props.scrapeImgur(imgrurl)
@@ -202,7 +224,7 @@ class PostIndex extends Component {
             <a href={this.props.posts[idx].data.url} target="_blank" rel="noopener noreferrer">
               <div className="image_overlay">
                 <div className="title_hover" onClick={this.handleReddit.bind(this)} data-link={`https://reddit.com${this.props.posts[idx].data.permalink}`}>
-                  {this.props.posts[idx].data.title}
+                  {postTitle}
                 </div>
               </div>
               <img src={url} alt={post.title}></img>
@@ -241,16 +263,15 @@ class PostIndex extends Component {
   }
 
   render() {
+    console.log(this.props);
     const {isLoaded} = this.state;
     if(!isLoaded) {
       return (<div>Loading...</div>)
     } else {
       return(
         <div>
-          <SearchBar createArray={this.createArray} updateIsLoaded={this.updateIsLoaded} requestPosts={this.props.requestPosts} clearPosts={this.props.clearPosts} updateTitle={this.updateTitle}/>
-          {`r/${this.state.title}`}
+          <SearchBar title={this.state.title} viewNsfw={this.state.viewNsfw} handleNSFW={this.handleNSFW} createArray={this.createArray} updateIsLoaded={this.updateIsLoaded} requestPosts={this.props.requestPosts} clearPosts={this.props.clearPosts} updateTitle={this.updateTitle}/>
           <br/>
-          <button onClick={this.handleNSFW} >{this.state.viewNsfw ? "nsfw on" : "nsfw off"}</button>
           <Masonry
             className={'my-gallery-class'}
             elementType={'ul'}

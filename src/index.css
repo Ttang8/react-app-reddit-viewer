@@ -77,6 +77,11 @@ code {
   margin: 20px;
 }
 
+.ytvideo {
+  width: 40%;
+  margin: 20px;
+}
+
 .image_container {
   display: flex;
   flex-wrap: wrap;
@@ -137,8 +142,9 @@ footer {
 .image_overlay {
   position: absolute;
   opacity: 0;
-  font-size: 20px;
+  font-size: 15px;
   /* margin-top: 92px; */
+  height: 50px;
   color: white;
   text-align: center;
   line-height: 25px;
