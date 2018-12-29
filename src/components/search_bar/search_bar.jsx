@@ -33,6 +33,7 @@ class SearchBar extends Component {
           <input placeholder="Subreddit" type="text" autoFocus="autofocus" value={this.state.subreddit} onChange={this.update('subreddit')}></input>
           <input type="submit" value="Search"></input>
         </form>
+        <button onClick={this.props.handleNSFW} >{this.props.viewNsfw ? "nsfw on" : "nsfw off"}</button>
         <br />
         {`r/${this.props.title}`}
       </div>
