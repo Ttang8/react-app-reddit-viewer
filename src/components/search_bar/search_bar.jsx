@@ -29,12 +29,11 @@ class SearchBar extends Component {
   render() {
     return(
       <div className="header">
+        <button className={`load_button ${this.props.viewNsfw ? "red_button" : ""}`} onClick={this.props.handleNSFW} >{this.props.viewNsfw ? "nsfw on" : "nsfw off"}</button>
         <form onSubmit={this.handleSubmit}>
           <input placeholder="Subreddit" type="text" autoFocus="autofocus" value={this.state.subreddit} onChange={this.update('subreddit')}></input>
-          <input type="submit" value="Search"></input>
+          <input className="load_button" type="submit" value="Search"></input>
         </form>
-        <button onClick={this.props.handleNSFW} >{this.props.viewNsfw ? "nsfw on" : "nsfw off"}</button>
-        <br />
         {`r/${this.props.title}`}
       </div>
     )

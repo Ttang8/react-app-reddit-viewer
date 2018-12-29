@@ -19,5 +19,6 @@ export const receiveHtml = (imageUrl) => ({
 });
 
 export const requestPosts = (afterString, postCount, subreddit, limit) => dispatch => (
-  APIUtil.requestPosts(afterString, postCount, subreddit, limit).then(posts => dispatch(receivePosts(posts)))
+  APIUtil.requestPosts(afterString, postCount, subreddit, limit)
+    .then(posts => dispatch(receivePosts(posts)))
 );

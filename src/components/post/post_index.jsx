@@ -28,7 +28,6 @@ class PostIndex extends Component {
   componentDidMount() {
     if(localStorage.hasOwnProperty('array')) {
       this.hydrateStateWithLocalStorage();
-      let afterString = JSON.parse(localStorage.getItem('afterString'));
       let length = JSON.parse(localStorage.getItem('array')).length;
       let title = JSON.parse(localStorage.getItem('title'));
       this.props.requestPosts("", "", title, length)
@@ -273,7 +272,7 @@ class PostIndex extends Component {
             {this.renderPosts()}
           </Masonry>
           <div className="load-button">
-            <button onClick={this.handleClick}>Load More</button>
+            <button className="load_button" onClick={this.handleClick}>Load More</button>
           </div>
         </div>
       )
