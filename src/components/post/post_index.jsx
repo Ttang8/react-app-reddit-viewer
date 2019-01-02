@@ -271,7 +271,9 @@ class PostIndex extends Component {
   render() {
     const {isLoaded} = this.state;
     if(!isLoaded) {
-      return (<div>Loading...</div>)
+      return (
+        <SearchBar title={this.state.title} />
+    )
     } else {
       return(
         <div>
