@@ -122,13 +122,13 @@ class PostIndex extends Component {
         if (this.props.posts[idx]) {
           if (this.props.posts[idx].data.parent_whitelist_status) {
             if (this.props.posts[idx].data.parent_whitelist_status.includes('nsfw')) {
-              return;
+              return(<li key={idx}></li>);
             }
           }
         }
       }
       if (post === undefined) {
-        return;
+        return(<li key={idx}></li>);
       } else if(post.includes('png') || post.includes('jpg')) {
         return(
           <li className="image deactive" key={idx}>
@@ -158,7 +158,7 @@ class PostIndex extends Component {
                     {postTitle}
                   </div>
                 </div>
-                <iframe className="gfycat" src={gfyurl} scrolling="no" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen={true}></iframe>
+                <iframe title={postTitle} className="gfycat" src={gfyurl} scrolling="no" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen={true}></iframe>
               </a>
             </li>
           );
@@ -202,7 +202,7 @@ class PostIndex extends Component {
                   {postTitle}
                 </div>
               </div>
-              <iframe height="300" width="500px" src={url} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              <iframe title={postTitle} height="300" width="500px" src={url} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </a>
           </li>
         )
@@ -228,14 +228,14 @@ class PostIndex extends Component {
         );
       });
       }else {
-        return;
+        return(<li key={idx}></li>);
       }
     });
     return posts;
   }
 
   renderErrors(){
-    if(this.props.errors) {
+    if(this.props.errors[0]) {
       return(
         <div>
           {`r/${this.state.title} does not exist yet. Try another subreddit.`}
@@ -267,7 +267,6 @@ class PostIndex extends Component {
   }
 
   render() {
-    console.log(this.props);
     const {isLoaded} = this.state;
     if(!isLoaded) {
       return (<div>Loading...</div>)
