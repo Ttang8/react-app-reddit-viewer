@@ -33,8 +33,9 @@ export const clearErrors = () => ({
 
 export const requestPosts = (afterString, postCount, subreddit, limit) => dispatch => (
   APIUtil.requestPosts(afterString, postCount, subreddit, limit)
-    .then(posts => dispatch(receivePosts(posts))
-  ),errors => (
-    dispatch(receiveErrors(errors.responseJSON))
-  )
+    .then(posts => (dispatch(receivePosts(posts))
+  ),errors => {
+    console.log('errors',errors);
+    return dispatch(receiveErrors(errors.responseJSON))
+  })
 );

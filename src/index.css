@@ -216,6 +216,12 @@ footer {
   background-color: pink;
 }
 
+.errors {
+  text-align: center;
+  padding-top: 100px;
+  color: red;
+}
+
 @media (max-width: 1000px) {
   .image {
     width: 45%;

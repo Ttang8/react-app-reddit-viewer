@@ -18,6 +18,8 @@ class PostIndex extends Component {
       array: []
     };
 
+    this.props.clearErrors();
+
     this.handleClick = this.handleClick.bind(this);
     this.handleNSFW = this.handleNSFW.bind(this);
     this.updateTitle = this.updateTitle.bind(this);
@@ -232,6 +234,16 @@ class PostIndex extends Component {
     return posts;
   }
 
+  renderErrors(){
+    if(this.props.errors) {
+      return(
+        <div>
+          {`r/${this.state.title} does not exist yet. Try another subreddit.`}
+        </div>
+      );
+    }
+  }
+
   handleLayoutComplete(laidoutitems) {
     setTimeout(() => laidoutitems.forEach(img => {
       img.element.className = "image active";
@@ -255,6 +267,7 @@ class PostIndex extends Component {
   }
 
   render() {
+    console.log(this.props);
     const {isLoaded} = this.state;
     if(!isLoaded) {
       return (<div>Loading...</div>)
@@ -263,6 +276,9 @@ class PostIndex extends Component {
         <div>
           <SearchBar title={this.state.title} viewNsfw={this.state.viewNsfw} handleNSFW={this.handleNSFW} createArray={this.createArray} updateIsLoaded={this.updateIsLoaded} requestPosts={this.props.requestPosts} clearPosts={this.props.clearPosts} updateTitle={this.updateTitle}/>
           <br/>
+          <div className="errors">
+            {this.renderErrors()}
+          </div>
           <Masonry
             className={'my-gallery-class'}
             elementType={'ul'}
