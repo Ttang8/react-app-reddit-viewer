@@ -235,7 +235,7 @@ class PostIndex extends Component {
   handleLayoutComplete(laidoutitems) {
     setTimeout(() => laidoutitems.forEach(img => {
       img.element.className = "image active";
-    }), 2500);
+    }), 1000);
   }
 
   handleNSFW (e) {
