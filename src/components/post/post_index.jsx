@@ -122,13 +122,13 @@ class PostIndex extends Component {
         if (this.props.posts[idx]) {
           if (this.props.posts[idx].data.parent_whitelist_status) {
             if (this.props.posts[idx].data.parent_whitelist_status.includes('nsfw')) {
-              return(<li key={idx}></li>);
+              return "";
             }
           }
         }
       }
       if (post === undefined) {
-        return(<li key={idx}></li>);
+        return "";
       } else if(post.includes('png') || post.includes('jpg')) {
         return(
           <li className="image deactive" key={idx}>
@@ -228,7 +228,7 @@ class PostIndex extends Component {
         );
       });
       }else {
-        return(<li key={idx}></li>);
+        return "";
       }
     });
     return posts;
@@ -237,10 +237,12 @@ class PostIndex extends Component {
   renderErrors(){
     if(this.props.errors[0]) {
       return(
-        <div>
+        <div className="errors">
           {`r/${this.state.title} does not exist yet. Try another subreddit.`}
         </div>
       );
+    }else {
+      return <div></div>
     }
   }
 
@@ -261,7 +263,7 @@ class PostIndex extends Component {
 
   handleClick (e) {
     e.preventDefault();
-    this.props.requestPosts(this.state.afterString, this.props.posts.length, this.state.title)
+    this.props.requestPosts(this.state.afterString, this.state.array.length, this.state.title)
       .then(() => this.handleAfter())
       .then(() => this.createArray());
   }
@@ -273,9 +275,9 @@ class PostIndex extends Component {
     } else {
       return(
         <div>
-          <SearchBar title={this.state.title} viewNsfw={this.state.viewNsfw} handleNSFW={this.handleNSFW} createArray={this.createArray} updateIsLoaded={this.updateIsLoaded} requestPosts={this.props.requestPosts} clearPosts={this.props.clearPosts} updateTitle={this.updateTitle}/>
+          <SearchBar clearErrors={this.props.clearErrors} title={this.state.title} viewNsfw={this.state.viewNsfw} handleNSFW={this.handleNSFW} createArray={this.createArray} updateIsLoaded={this.updateIsLoaded} requestPosts={this.props.requestPosts} clearPosts={this.props.clearPosts} updateTitle={this.updateTitle}/>
           <br/>
-          <div className="errors">
+          <div>
             {this.renderErrors()}
           </div>
           <Masonry
